@@ -1,11 +1,44 @@
 {% extends 'pokemon/base.html' %}
 
 {% block content %}
-<h2>Agregar Pokémon</h2>
+<div class="container mt-4">
+    <h2><i class="fas fa-plus-circle"></i> Agregar Pokémon</h2>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">
+                    {% if field.name == 'nombre' %}
+                        <i class="fas fa-paw"></i> Nombre
+                    {% elif field.name == 'nombre_entrenador' %}
+                        <i class="fas fa-user"></i> Entrenador
+                    {% elif field.name == 'tipo' %}
+                        <i class="fas fa-fire"></i> Tipo
+                    {% elif field.name == 'peso' %}
+                        <i class="fas fa-weight"></i> Peso
+                    {% elif field.name == 'altura' %}
+                        <i class="fas fa-ruler-vertical"></i> Altura
+                    {% elif field.name == 'fotografia' %}
+                        <i class="fas fa-camera"></i> Fotografía
+                    {% else %}
+                        {{ field.label }}
+                    {% endif %}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Guardar Pokémon
+        </button>
+        <a href="{% url 'pokemon:home' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </form>
+</div>
 {% endblock %}

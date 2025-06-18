@@ -1,26 +1,37 @@
 {% extends 'pokemon/base.html' %}
-{% block content %}
-<a href="{% url 'pokemon:agregar_pokemon' %}" class="btn btn-success mb-3">Agregar nuevo Pokémon</a>
 
-<div class="row">
-    {% for pokemon in pokemons %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            {% if pokemon.fotografia %}
-                <img src="{{ pokemon.fotografia.url }}" class="card-img-top" alt="Foto de {{ pokemon.nombre }}">
-            {% else %}
-                <img src="https://via.placeholder.com/300x200?text=Sin+Foto" class="card-img-top">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ pokemon.nombre }}</h5>
-                <p class="card-text">Entrenador: {{ pokemon.nombre_entrenador }}</p>
-                <p class="card-text">Tipo: {{ pokemon.tipo }}</p>
-                <p class="card-text">Peso: {{ pokemon.peso }} kg | Altura: {{ pokemon.altura }} m</p>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-        <p class="text-muted">No hay Pokémon registrados aún.</p>
-    {% endfor %}
-</div>
+{% block content %}
+  {% if user.is_authenticated %}
+    <a href="{% url 'pokemon:agregar_pokemon' %}" class="btn btn-success mb-3">
+        <i class="fa fa-plus"></i> Agregar nuevo Pokémon
+    </a>
+  {% endif %}
+
+  <h2 class="mb-4">Lista de Pokémon</h2>
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+      {% for pokemon in pokemons %}
+      <div class="col">
+          <div class="card h-100 text-center shadow-sm">
+              {% if pokemon.fotografia %}
+                  <img src="{{ pokemon.fotografia.url }}" class="card-img-top mx-auto d-block" style="max-height: 200px; object-fit: contain;" alt="{{ pokemon.nombre }}">
+              {% else %}
+                  <img src="https://via.placeholder.com/300x200?text=Sin+foto" class="card-img-top" alt="Sin foto">
+              {% endif %}
+              <div class="card-body">
+                  <h5 class="card-title">{{ pokemon.nombre }}</h5>
+                  <p class="card-text">Entrenador: {{ pokemon.nombre_entrenador }}</p>
+                  <p class="card-text">Tipo: {{ pokemon.tipo }}</p>
+                  <p class="card-text">Peso: {{ pokemon.peso }} kg | Altura: {{ pokemon.altura }} m</p>
+              </div>
+              <div class="card-footer d-flex justify-content-center gap-2">
+                  <a href="{% url 'pokemon:detalle_pokemon' pk=pokemon.id %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Vista</a>
+                  <a href="{% url 'pokemon:editar_pokemon' id=pokemon.id %}" class="btn btn-sm btn-warning"><i class="fas fa-pen"></i> Editar</a>
+                  <a href="{% url 'pokemon:eliminar_pokemon' id=pokemon.id %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Eliminar</a>
+              </div>
+          </div>
+      </div>
+      {% empty %}
+      <p class="text-muted">No hay Pokémon registrados aún.</p>
+      {% endfor %}
+  </div>
 {% endblock %}
