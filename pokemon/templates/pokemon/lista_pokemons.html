@@ -1,0 +1,26 @@
+{% extends 'pokemon/base.html' %}
+{% block content %}
+<a href="{% url 'pokemon:agregar_pokemon' %}" class="btn btn-success mb-3">Agregar nuevo Pokémon</a>
+
+<div class="row">
+    {% for pokemon in pokemons %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if pokemon.fotografia %}
+                <img src="{{ pokemon.fotografia.url }}" class="card-img-top" alt="Foto de {{ pokemon.nombre }}">
+            {% else %}
+                <img src="https://via.placeholder.com/300x200?text=Sin+Foto" class="card-img-top">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ pokemon.nombre }}</h5>
+                <p class="card-text">Entrenador: {{ pokemon.nombre_entrenador }}</p>
+                <p class="card-text">Tipo: {{ pokemon.tipo }}</p>
+                <p class="card-text">Peso: {{ pokemon.peso }} kg | Altura: {{ pokemon.altura }} m</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-muted">No hay Pokémon registrados aún.</p>
+    {% endfor %}
+</div>
+{% endblock %}

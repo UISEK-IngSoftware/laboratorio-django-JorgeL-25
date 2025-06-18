@@ -1,0 +1,13 @@
+{% extends 'pokemon/base.html' %}
+
+{% block content %}
+<h2>{{ pokemon.nombre }}</h2>
+<p><strong>Entrenador:</strong> {{ pokemon.nombre_entrenador }}</p>
+<p><strong>Tipo:</strong> {{ pokemon.tipo }}</p>
+<p><strong>Peso:</strong> {{ pokemon.peso }} kg</p>
+<p><strong>Altura:</strong> {{ pokemon.altura }} m</p>
+{% if pokemon.fotografia %}
+    <img src="{{ pokemon.fotografia.url }}" class="img-fluid" alt="Foto de {{ pokemon.nombre }}">
+{% endif %}
+<a href="{% url 'pokemon:lista_pokemons' %}" class="btn btn-secondary mt-3">Volver</a>
+{% endblock %}
