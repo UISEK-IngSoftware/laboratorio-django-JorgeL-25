@@ -1,5 +1,6 @@
 from django import forms
 from .models import Pokemon
+from pokemon.models import Entrenador  # 👈 Importación necesaria
 
 class PokemonForm(forms.ModelForm):
     class Meta:
@@ -12,6 +13,11 @@ class PokemonForm(forms.ModelForm):
             'height': forms.NumberInput(attrs={'class': 'form-control'}),
             'picture': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
-                'id' : 'image_field'
+                'id': 'image_field'
             }),
         }
+
+class EntrenadorForm(forms.ModelForm):
+    class Meta:
+        model = Entrenador
+        fields = '__all__'
