@@ -1,21 +1,23 @@
 export const pokemons = [
   {
     id: 1,
-    name: "Bulbasaur",
-    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
-    type: "grass"
+    nombre: "Bulbasaur",
+    tipo: "Planta",
+    imagen: "/images/bulbasaur.png",
+    descripcion: "Bulbasaur almacena energía solar en su bulbo. Le encanta descansar al sol."
   },
   {
-    id: 4,
-    name: "Charmander",
-    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
-    type: "fire"
+    id: 2,
+    nombre: "Charmander",
+    tipo: "Fuego",
+    imagen: "/images/charmander.png",
+    descripcion: "La llama en su cola indica su estado emocional. Arde más fuerte si está enfadado."
   },
   {
-    id: 7,
-    name: "Squirtle",
-    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
-    type: "water"
+    id: 3,
+    nombre: "Squirtle",
+    tipo: "Agua",
+    imagen: "/images/Squirtle.png",
+    descripcion: "Cuando se siente amenazado, se esconde en su caparazón y lanza agua a presión."
   },
-  // Agregar más pokemons...
 ];
