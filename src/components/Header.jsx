@@ -1,15 +1,27 @@
-import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+import React from 'react';
+import './Header.css';
 
-export default function Header() {
+function Header() {
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#2196f3' }}>
-      <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
-          <img src="/images/logo.png" height="140" />
-        </Box>
-        <Button color="inherit">Inicio</Button>
-        <Button color="inherit">Contacto</Button>
-      </Toolbar>
-    </AppBar>
+    <>
+      {/* Logo grande y centrado */}
+      <div className="logo-container">
+        <img 
+          src="/images/logo.png" 
+          alt="Pokédex Logo" 
+          style={{width: "400px", height: "auto", margin: "20px auto", display: "block"}} 
+        />
+      </div>
+
+      {/* Barra de navegación */}
+      <div className="navbar">
+        <div className="nav-links">
+          <a href="/">INICIO</a>
+          <a href="/crear">AGREGAR POKEMON</a>
+        </div>
+      </div>
+    </>
   );
 }
+
+export default Header;

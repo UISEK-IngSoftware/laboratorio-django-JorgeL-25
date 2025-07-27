@@ -1,49 +1,43 @@
-import { Card, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./PokemonCard.css";
 
-export default function PokemonCard({ pokemon, onVerDetalle, onEliminar }) {
+function PokemonCard({ pokemon, mostrarSoloVer = false }) {
+  const imagenUrl = pokemon.imagen?.startsWith("http")
+    ? pokemon.imagen
+    : `${import.meta.env.VITE_API_URL}${pokemon.imagen}`;
+
   return (
-    <Card
-      sx={{
-        width: 220,
-        height: 340,
-        m: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}
-    >
-      <CardMedia
-        component="img"
-        image={pokemon.imagen}
+    <div className="card text-center shadow-sm" style={{ width: "200px", margin: "20px", borderRadius: "12px" }}>
+      <img
+        src={pokemon.imagen}
         alt={pokemon.nombre}
-        sx={{
-          width: '160px',
-          height: '160px',
-          objectFit: 'contain',
-          marginTop: 2
-        }}
-        onError={(e) => { e.target.src = '/images/default.png'; }}
+        className="card-img-top"
+        style={{ height: "150px", objectFit: "cover", borderTopLeftRadius: "12px", borderTopRightRadius: "12px" }}
       />
-      <CardContent sx={{ textAlign: 'center' }}>
-        <Typography variant="h6">{pokemon.nombre}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          Tipo: {pokemon.tipo}
-        </Typography>
-      </CardContent>
-      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button size="small" variant="contained" onClick={() => onVerDetalle(pokemon)}>
-          Ver Detalle
-        </Button>
-        <Button
-          size="small"
-          variant="outlined"
-          color="error"
-          onClick={() => onEliminar(pokemon.id)}
-        >
-          Eliminar
-        </Button>
-      </Box>
-    </Card>
+      <div className="card-body">
+        <h5 className="card-title">{pokemon.nombre}</h5>
+        <p className="card-text">
+          <strong>Tipo:</strong> {pokemon.tipo}
+        </p>
+        <div className="btn-group">
+          <Link to={`/detalle/${pokemon.id}`} className="btn btn-primary btn-sm">
+            <i className="fa fa-eye"></i>
+          </Link>
+          {!mostrarSoloVer && (
+            <>
+              <Link to={`/editar/${pokemon.id}`} className="btn btn-warning btn-sm">
+                <i className="fa fa-edit"></i>
+              </Link>
+              <button className="btn btn-danger btn-sm">
+                <i className="fa fa-trash"></i>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
+
+export default PokemonCard;
