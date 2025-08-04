@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Listado de Pokemon{% endblock title %}
+            <br>
+            <p>Has elegido el pokemon: <strong>{{ Pokemon | capfirst }}</strong></p>
+            <h3>Caracteristicas</h3>
+            <ul>
+                <li>Tipo: {{pokemon.type}}</li>
+                <li>Peso: {{pokemon.weight}} kg.</li>
+                <li>Altura: {{pokemon.height }} cm.</li>
+            </ul>
+            <img src="{{ pokemon.picture.url }}" alt="{{ pokemon.name }}" class="img-thumbnail"/>
+{% endblock content %}

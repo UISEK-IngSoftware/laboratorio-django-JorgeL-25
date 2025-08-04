@@ -1,0 +1,38 @@
+{% extends 'pokemon/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if pokemon.fotografia %}
+                    <img src="{{ pokemon.fotografia.url }}" class="img-fluid rounded-start" alt="{{ pokemon.nombre }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/300x300?text=Sin+foto" class="img-fluid rounded-start" alt="Sin foto">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">{{ pokemon.nombre }}</h3>
+                    <p class="card-text"><strong>Entrenador:</strong> {{ pokemon.nombre_entrenador }}</p>
+                    <p class="card-text"><strong>Tipo:</strong> {{ pokemon.tipo }}</p>
+                    <p class="card-text"><strong>Peso:</strong> {{ pokemon.peso }} kg</p>
+                    <p class="card-text"><strong>Altura:</strong> {{ pokemon.altura }} cm</p>
+
+                    <div class="mt-3 d-flex gap-2">
+                        <a href="{% url 'pokemon:editar_pokemon' pk=pokemon.id %}" class="btn btn-warning">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </a>
+                        <a href="{% url 'pokemon:eliminar_pokemon' pk=pokemon.id %}" class="btn btn-danger">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </a>
+                        <a href="{% url 'pokemon:home' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

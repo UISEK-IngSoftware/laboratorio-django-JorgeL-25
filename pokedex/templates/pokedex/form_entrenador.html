@@ -1,0 +1,12 @@
+{% extends 'pokemon/base.html' %}
+
+{% block content %}
+<h2>{{ form.instance.id|yesno:"Editar Entrenador,Agregar Entrenador" }}</h2>
+
+<form method="post" class="mt-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'pokedex:lista_entrenadores' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
