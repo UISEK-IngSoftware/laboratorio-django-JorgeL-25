@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api"; // Cliente axios con token
+import { useAuth } from "../context/AuthContext";
 
 function DetallePokemon() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();
   const [pokemon, setPokemon] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/pokemon/${id}/`)
+    api
+      .get(`/pokemon/${id}/`)
       .then((res) => setPokemon(res.data))
       .catch((err) => {
         console.error(err);
@@ -20,8 +22,8 @@ function DetallePokemon() {
 
   const eliminarPokemon = () => {
     if (confirm("¿Estás seguro de eliminar este Pokémon?")) {
-      axios
-        .delete(`${import.meta.env.VITE_API_URL}/pokemon/${id}/`)
+      api
+        .delete(`/pokemon/${id}/`)
         .then(() => navigate("/"))
         .catch((err) => {
           console.error(err);
@@ -30,7 +32,13 @@ function DetallePokemon() {
     }
   };
 
-  if (!pokemon) return <p className="text-center mt-5">Cargando...</p>;
+  if (error) {
+    return <div className="alert alert-danger text-center mt-4">{error}</div>;
+  }
+
+  if (!pokemon) {
+    return <p className="text-center mt-5">Cargando...</p>;
+  }
 
   return (
     <div className="container mt-5 d-flex justify-content-center">
@@ -38,12 +46,12 @@ function DetallePokemon() {
         <img
           src={pokemon.imagen}
           alt={pokemon.nombre}
-          style={{ 
+          style={{
             width: "100%",
             height: "auto",
             maxHeight: "300px",
-            objectFit: "contain", 
-            marginBottom: "20px"
+            objectFit: "contain",
+            marginBottom: "20px",
           }}
         />
         <div className="card-body text-center">
@@ -52,14 +60,16 @@ function DetallePokemon() {
           <p className="card-text"><strong>Peso:</strong> {pokemon.peso} kg</p>
           <p className="card-text"><strong>Altura:</strong> {pokemon.altura} cm</p>
 
-          <div className="btn-group mt-3">
-            <Link to={`/editar/${pokemon.id}`} className="btn btn-warning">
-              <i className="fa fa-edit"></i> Editar
-            </Link>
-            <button onClick={eliminarPokemon} className="btn btn-danger">
-              <i className="fa fa-trash"></i> Eliminar
-            </button>
-          </div>
+          {token && (
+            <div className="btn-group mt-3">
+              <Link to={`/editar/${pokemon.id}`} className="btn btn-warning">
+                <i className="fa fa-edit"></i> Editar
+              </Link>
+              <button onClick={eliminarPokemon} className="btn btn-danger">
+                <i className="fa fa-trash"></i> Eliminar
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

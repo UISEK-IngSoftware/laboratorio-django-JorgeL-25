@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api"; // cliente Axios con token
+import { useAuth } from "../context/AuthContext"; // para validar sesión
 
 function EditarPokemon() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth(); // protegemos si no hay token
+
   const [pokemon, setPokemon] = useState({
     nombre: "",
     tipo: "",
@@ -13,19 +16,29 @@ function EditarPokemon() {
     imagen: null,
   });
 
+  // Redirige si no está logueado
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/pokemon/${id}/`)
+    if (!token) {
+      alert("Iniciar sesión para editar Pokémon");
+      navigate("/");
+      return;
+    }
+
+    api.get(`/pokemon/${id}/`)
       .then(res => {
         setPokemon({
           nombre: res.data.nombre,
           tipo: res.data.tipo,
           peso: res.data.peso,
           altura: res.data.altura,
-          imagen: null, // no prellenar el input file
+          imagen: null,
         });
       })
-      .catch(err => console.error("Error al cargar Pokémon", err));
-  }, [id]);
+      .catch(err => {
+        console.error("Error al cargar Pokémon", err);
+        alert("No se pudo cargar el Pokémon");
+      });
+  }, [id, navigate, token]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -48,15 +61,16 @@ function EditarPokemon() {
     }
 
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/pokemon/${id}/`, formData, {
+      await api.put(`/pokemon/${id}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Pokémon actualizado");
+      alert("Pokémon actualizado correctamente");
       navigate(`/detalle/${id}`);
     } catch (error) {
       console.error("Error al actualizar el Pokémon", error);
+      alert("No se pudo actualizar el Pokémon");
     }
   };
 
@@ -71,6 +85,7 @@ function EditarPokemon() {
           value={pokemon.nombre}
           onChange={handleChange}
           placeholder="Nombre"
+          required
         />
         <input
           className="form-control mb-3"
@@ -79,6 +94,7 @@ function EditarPokemon() {
           value={pokemon.tipo}
           onChange={handleChange}
           placeholder="Tipo"
+          required
         />
         <input
           className="form-control mb-3"
@@ -87,7 +103,8 @@ function EditarPokemon() {
           name="peso"
           value={pokemon.peso}
           onChange={handleChange}
-          placeholder="Peso"
+          placeholder="Peso (kg)"
+          required
         />
         <input
           className="form-control mb-3"
@@ -96,7 +113,8 @@ function EditarPokemon() {
           name="altura"
           value={pokemon.altura}
           onChange={handleChange}
-          placeholder="Altura"
+          placeholder="Altura (cm)"
+          required
         />
         <input
           className="form-control mb-3"

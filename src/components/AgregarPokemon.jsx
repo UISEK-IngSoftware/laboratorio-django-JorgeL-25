@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api"; // tu cliente Axios con token dinámico
+import { useAuth } from "../context/AuthContext"; // ruta real si usas otro nombre
 
 const AgregarPokemon = () => {
   const [nombre, setNombre] = useState("");
@@ -8,6 +9,8 @@ const AgregarPokemon = () => {
   const [altura, setAltura] = useState("");
   const [imagen, setImagen] = useState(null);
   const [mensaje, setMensaje] = useState("");
+
+  const { token } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,24 +22,27 @@ const AgregarPokemon = () => {
     if (imagen) formData.append("imagen", imagen);
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/pokemon/`, formData, {
+      await api.post("/pokemon/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       setMensaje("Pokémon agregado exitosamente");
-      // Limpiar campos
       setNombre("");
       setTipo("");
       setPeso("");
       setAltura("");
       setImagen(null);
-      // También podrías redirigir si deseas: navigate("/");
     } catch (error) {
-      setMensaje("Error al agregar Pokémon.");
       console.error(error);
+      setMensaje("Error al agregar Pokémon. Verifica el token.");
     }
   };
+
+  if (!token) {
+    return <p className="alert alert-danger">Iniciar sesión para agregar Pokémon.</p>;
+  }
 
   return (
     <div className="container mt-5">
